@@ -3,7 +3,8 @@ import history from '../history';
 import {
   AUTH_USER,
   AUTH_ERROR,
-  UNAUTH_USER
+  UNAUTH_USER,
+  GET_EMAIL
 } from './types';
 
 const ROOT_URL = 'http://localhost:3090';
@@ -62,6 +63,37 @@ export function signUpUser({ username, email, password }) {
           dispatch({
             type: AUTH_ERROR,
             payload: "Сервер недоступен"
+          });
+        }
+      });
+  }
+}
+
+export function getEmail() {
+  return function(dispatch) {
+
+    axios.post(`${ROOT_URL}/getemail`, {}, {
+      headers: { authorization: localStorage.getItem('token') }
+    })
+      .then(response => {
+        dispatch({
+          type: GET_EMAIL,
+          status: 'success',
+          email: response.data.email
+        });
+      })
+      .catch((error) => {
+        if (error.response) {
+          dispatch({
+            type: GET_EMAIL,
+            status: 'error',
+            error: error.response.data.error
+          });
+        } else {
+          dispatch({
+            type: GET_EMAIL,
+            status: 'error',
+            error: 'Сервер недоступен'
           });
         }
       });

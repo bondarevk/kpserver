@@ -1,39 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import axios from 'axios';
 import * as actions from '../actions';
 
 class Feature extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: '***'
-    };
-  }
-
   componentWillMount() {
-    axios.post('http://localhost:3090/getemail', {}, {
-      headers: { authorization: localStorage.getItem('token') }
-    })
-      .then(response => {
-        this.setState({
-          email: response.data.email
-        })
-      })
-      .catch((error) => {
-        if (error.response) {
-          console.log(error.response.data.error);
-        } else {
-          console.log(error);
-        }
-      });
+    this.props.getEmail();
   }
 
   render() {
     return (
       <div>
-        Email: {this.state.email}
+        Email: {this.props.info.email}
       </div>
     );
   }
@@ -41,7 +19,7 @@ class Feature extends Component {
 
 function mapStateToProps(state) {
   return {
-    auth: state.auth
+    info: state.info
   };
 }
 
