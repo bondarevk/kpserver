@@ -9,7 +9,9 @@ const cors = require('cors');
 
 mongoose.connect('mongodb://localhost/kpserver', { useMongoClient: true });
 
-app.use(morgan('combined'));
+mongoose.Promise = Promise;
+
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 app.use(bodyParser.json({ type: '*/*' }));
 
 app.use(cors());
